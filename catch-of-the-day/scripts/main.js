@@ -15,18 +15,18 @@ var h = require('./helpers');
 */
 var App = React.createClass({
 // set the state as App first runs
-getInitialState: function() {
+  getInitialState: function() {
   return {
     fishes: {},
     order: {}
   }
 },
 
-loadSamples: function() {
+  loadSamples: function() {
   this.setState({fishes: require('./sample-fishes')})
 },
 
-addFish: function(fish) {
+  addFish: function(fish) {
     var timestamp = (new Date()).getTime();
     //update state object
     this.state.fishes['fish-' + timestamp] = fish;
@@ -34,11 +34,20 @@ addFish: function(fish) {
     this.setState({fishes: this.state.fishes});
 },
 
+  renderFish: function(key) {
+    return (
+      <Fish key={key} index={key} details={this.state.fishes[key]} />
+    )
+  },
+
   render: function() {
     return (
       <div className="catch-of-the-day">
         <div className="menu">
           <Header tagline="Fresh Seafood Market" />
+          <ul className="list-of-fishes">
+            {Object.keys(this.state.fishes).map(this.renderFish)}
+          </ul>
         </div>
         <Order />
         <Inventory addFish={this.addFish} loadSamples={this.loadSamples}/>
@@ -88,7 +97,7 @@ var Inventory = React.createClass({
       <div>
         <h2>Inventory</h2>
         <AddFishForm addFish={this.props.addFish} />
-        <button onClick={this.props.loadSamples}>Load Samples</button>;
+        <button onClick={this.props.loadSamples}>Load Samples</button>
       </div>
     );
   }
@@ -173,6 +182,27 @@ createFish: function(event) {
         <input type="text" ref="image" placeholder="URL to image" />
         <button type="submit">+ Add Item</button>
       </form>
+    )
+  }
+})
+
+/*
+  Fish
+*/
+
+var Fish = React.createClass({
+
+  render: function() {
+    var details = this.props.details;
+    return (
+      <li className="menu-fish">
+        <img src={details.image} alt={details.name} />
+        <h3 className="fish-name">
+          {details.name}
+          <span className="price">{h.formatPrice(details.price)}</span>
+        </h3>
+        <p>{details.desc}</p>
+      </li>
     )
   }
 })
