@@ -19,12 +19,12 @@ var App = React.createClass({
   return {
     fishes: {},
     order: {}
-  }
-},
+    }
+  },
 
   loadSamples: function() {
   this.setState({fishes: require('./sample-fishes')})
-},
+  },
 
   addFish: function(fish) {
     var timestamp = (new Date()).getTime();
@@ -32,11 +32,16 @@ var App = React.createClass({
     this.state.fishes['fish-' + timestamp] = fish;
     //set state
     this.setState({fishes: this.state.fishes});
-},
+  },
+
+  addToOrder: function(key) {
+    this.state.order[key] = this.state.order[key] + 1 || 1;
+    this.setState({order: this.state.order})
+  },
 
   renderFish: function(key) {
     return (
-      <Fish key={key} index={key} details={this.state.fishes[key]} />
+      <Fish key={key} index={key} details={this.state.fishes[key]} addToOrder={this.addToOrder} />
     )
   },
 
@@ -192,8 +197,14 @@ createFish: function(event) {
 
 var Fish = React.createClass({
 
+  addToOrder: function() {
+    this.props.addToOrder(this.props.index);
+  },
+  
   render: function() {
     var details = this.props.details;
+    var isAvailable = (details.status === 'available' ? true : false);
+    var buttonText = (isAvailable ? 'Add To Order' : 'Sold Out!')
     return (
       <li className="menu-fish">
         <img src={details.image} alt={details.name} />
@@ -202,6 +213,7 @@ var Fish = React.createClass({
           <span className="price">{h.formatPrice(details.price)}</span>
         </h3>
         <p>{details.desc}</p>
+        <button disabled={!isAvailable} onClick={this.addToOrder}>{buttonText}</button>
       </li>
     )
   }
