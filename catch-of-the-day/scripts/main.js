@@ -54,7 +54,7 @@ var App = React.createClass({
             {Object.keys(this.state.fishes).map(this.renderFish)}
           </ul>
         </div>
-        <Order />
+        <Order order={this.state.order} fishes={this.state.fishes}/>
         <Inventory addFish={this.addFish} loadSamples={this.loadSamples}/>
       </div>
     );
@@ -85,9 +85,44 @@ var Header = React.createClass({
   Order
 */
 var Order = React.createClass({
+
+  renderOrder: function(key) {
+    var fish = this.props.fishes[key];
+    var count = this.props.order[key];
+    if (!fish) {
+      return <li key={key}>Sorry no fish available.</li>
+    }
+    return(
+      <li key={key}>
+        {count}lbs
+        {fish.name}
+        <span className="price">{h.formatPrice(count * fish.price)}</span>
+      </li>
+    )
+  },
+
   render: function() {
+    var orderIds = Object.keys(this.props.order);
+    var total= orderIds.reduce((prevTotal, key)=> {
+      var fish = this.props.fishes[key];
+      var count = this.props.order[key];
+      var isAvailable = fish && fish.status === 'available';
+      if (fish && isAvailable){
+        return prevTotal + (count * parseInt(fish.price) || 0);
+      }
+      return prevTotal;
+    }, 0)
     return (
-      <p>Order</p>
+      <div className="order-wrap">
+        <h2 className="order-title">Your Order</h2>
+        <ul className="order">
+          {orderIds.map(this.renderOrder)}
+          <li className="total">
+            <strong>Total:</strong>
+            {h.formatPrice(total)}
+          </li>
+        </ul>
+      </div>
     );
   }
 });
@@ -200,7 +235,7 @@ var Fish = React.createClass({
   addToOrder: function() {
     this.props.addToOrder(this.props.index);
   },
-  
+
   render: function() {
     var details = this.props.details;
     var isAvailable = (details.status === 'available' ? true : false);
