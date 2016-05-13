@@ -22,6 +22,10 @@ getInitialState: function() {
   }
 },
 
+loadSamples: function() {
+  this.setState({fishes: require('./sample-fishes')})
+},
+
 addFish: function(fish) {
     var timestamp = (new Date()).getTime();
     //update state object
@@ -37,7 +41,7 @@ addFish: function(fish) {
           <Header tagline="Fresh Seafood Market" />
         </div>
         <Order />
-        <Inventory addFish={this.addFish}/>
+        <Inventory addFish={this.addFish} loadSamples={this.loadSamples}/>
       </div>
     );
   }
@@ -84,6 +88,7 @@ var Inventory = React.createClass({
       <div>
         <h2>Inventory</h2>
         <AddFishForm addFish={this.props.addFish} />
+        <button onClick={this.props.loadSamples}>Load Samples</button>;
       </div>
     );
   }
