@@ -114,6 +114,9 @@ var Header = React.createClass({
         <h3 className="tagline"><span>{this.props.tagline}</span></h3>
       </header>
     );
+  },
+  propTypes: {
+    tagline: React.PropTypes.string.isRequired
   }
 });
 
@@ -173,6 +176,11 @@ var Order = React.createClass({
 
       </div>
     );
+  },
+  propTypes: {
+    order: React.PropTypes.object.isRequired,
+    fishes: React.PropTypes.object.isRequired,
+    removeFromOrder: React.PropTypes.func.isRequired
   }
 });
 
@@ -207,6 +215,13 @@ var Inventory = React.createClass({
         <button onClick={this.props.loadSamples}>Load Samples</button>
       </div>
     );
+  },
+  propTypes: {
+    addFish: React.PropTypes.func.isRequired,
+    loadSamples: React.PropTypes.func.isRequired,
+    removeFish: React.PropTypes.func.isRequired,
+    linkState: React.PropTypes.func.isRequired,
+    fishes: React.PropTypes.object.isRequired
   }
 });
 
@@ -290,6 +305,9 @@ createFish: function(event) {
         <button type="submit">+ Add Item</button>
       </form>
     )
+  },
+  propTypes:{
+    addFish: React.PropTypes.func.isRequired
   }
 })
 
