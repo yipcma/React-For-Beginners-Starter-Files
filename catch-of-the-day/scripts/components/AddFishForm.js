@@ -3,10 +3,12 @@
 */
 
 import React from 'react';
+import autobind from 'autobind-decorator';
 
-var AddFishForm = React.createClass({
+@autobind
+class AddFishForm extends React.Component {
 
-createFish: function(event) {
+createFish(event) {
   //1. Prevent refreshing
   event.preventDefault();
 
@@ -22,9 +24,9 @@ createFish: function(event) {
   // can also use spread {...this.props} instead of addFish={this.props.addFish}
   this.props.addFish(fish);
   this.refs.fishForm.reset();
-},
+}
 
-  render: function() {
+  render() {
     return(
       <form className="fish-edit" ref="fishForm" onSubmit={this.createFish}>
         <input type="text" ref="name" placeholder="Fish Name" />
@@ -37,11 +39,12 @@ createFish: function(event) {
         <input type="text" ref="image" placeholder="URL to image" />
         <button type="submit">+ Add Item</button>
       </form>
-    )
-  },
-  propTypes:{
-    addFish: React.PropTypes.func.isRequired
+    );
   }
-})
+}
+
+AddFishForm.propTypes = {
+  addFish: React.PropTypes.func.isRequired
+}
 
 export default AddFishForm;

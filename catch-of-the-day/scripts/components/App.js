@@ -4,8 +4,8 @@
 
 import React from 'react';
 import Catalyst from 'react-catalyst';
-import autobind from 'autobind-decorator';
-import reactMixin from 'react-mixin';
+import autobind from 'autobind-decorator'; //ES7 this binding
+import reactMixin from 'react-mixin'; //ES6 mixin 
 
 import Header from './Header';
 import Inventory from './Inventory';
